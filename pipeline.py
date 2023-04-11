@@ -52,4 +52,4 @@ class PreTrainedPipeline():
         with torch.no_grad():
             feature_vector = self.model(image, text, mode=parameters["mode"])[0,0].tolist()
         # postprocess the prediction
-        return {"feature_vector": feature_vector}
+        return feature_vector
