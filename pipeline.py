@@ -44,7 +44,7 @@ class PreTrainedPipeline():
         """
         parameters = {"mode": "image"}
         # decode base64 image to PIL
-        image = Image.open(BytesIO(base64.b64decode(inputs)))
+        image = Image.open(BytesIO(base64.b64decode(inputs))).convert("RGB")
         image = self.transform(image).unsqueeze(0).to(device)   
         text=""
         with torch.no_grad():
