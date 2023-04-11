@@ -29,7 +29,7 @@ import json
 from typing import List
 import requests as r
 import base64
-ENDPOINT_URL = ""
+ENDPOINT_URL = "https://api-inference.huggingface.co/models/radames/blip_image_embeddings"
 HF_TOKEN = ""
 def predict(path_to_image: str = None):
     with open(path_to_image, "rb") as i:
