@@ -36,7 +36,7 @@ def predict(path_to_image: str = None):
         b64 = base64.b64encode(i.read())
     payload = {"inputs": b64.decode("utf-8")}
     response = r.post(
-        ENDPOINT_URL, headers={"Authorization": f"Bearer {HF_TOKEN}"}, json=payload
+        ENDPOINT_URL, headers={"X-Wait-For-Model": "true", "Authorization": f"Bearer {HF_TOKEN}"}, json=payload
     )
     return response.json()
 prediction = predict(
