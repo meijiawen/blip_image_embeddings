@@ -1,0 +1,4 @@
+timm
+fairscale
+requests
+Pillow
