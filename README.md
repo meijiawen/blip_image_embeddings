@@ -1,7 +1,7 @@
 ---
 tags:
 - feature-extraction
-- endpoints-template
+- vision
 license: bsd-3-clause
 library_name: generic
 duplicated_from: florentgbelidji/blip_image_embeddings
