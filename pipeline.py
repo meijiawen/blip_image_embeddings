@@ -33,7 +33,7 @@ class PreTrainedPipeline():
      
 
 
-    def __call__(self, data: Any) -> Dict[str, List[float]]:
+    def __call__(self, inputs: str) -> List[float]:
         """
         Args:
             data (:obj:):
@@ -42,9 +42,7 @@ class PreTrainedPipeline():
             A :obj:`dict`:. The object returned should be a dict like {"feature_vector": [0.6331314444541931,0.8802216053009033,...,-0.7866355180740356,]} containing :
                 - "feature_vector": A list of floats corresponding to the image embedding.
         """
-        inputs = data["inputs"]
         parameters = {"mode": "image"}
-        
         # decode base64 image to PIL
         image = Image.open(BytesIO(base64.b64decode(inputs)))
         image = self.transform(image).unsqueeze(0).to(device)   
