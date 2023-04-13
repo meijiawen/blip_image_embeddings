@@ -1,4 +1,4 @@
-from typing import  Dict, List, Any
+from typing import Dict, List, Any, Union
 from PIL import Image
 import requests
 import torch
@@ -11,29 +11,30 @@ from torchvision.transforms.functional import InterpolationMode
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+
 class PreTrainedPipeline():
     def __init__(self, path=""):
         # load the optimized model
-        self.model_path = os.path.join(path,'model_large_retrieval_coco.pth') 
+        self.model_path = os.path.join(path, 'model_large_retrieval_coco.pth')
         self.model = blip_feature_extractor(
-            pretrained=self.model_path, 
-            image_size=384, 
+            pretrained=self.model_path,
+            image_size=384,
             vit='large',
             med_config=os.path.join(path, 'configs/med_config.json')
         )
         self.model.eval()
         self.model = self.model.to(device)
-        
+
         image_size = 384
         self.transform = transforms.Compose([
-            transforms.Resize((image_size,image_size),interpolation=InterpolationMode.BICUBIC),
+            transforms.Resize((image_size, image_size),
+                              interpolation=InterpolationMode.BICUBIC),
             transforms.ToTensor(),
-            transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
-            ]) 
-     
+            transforms.Normalize(
+                (0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
+        ])
 
-
-    def __call__(self, inputs: str) -> List[float]:
+    def __call__(self, inputs: Union[str, "Image.Image"]) -> List[float]:
         """
         Args:
             data (:obj:):
@@ -43,11 +44,18 @@ class PreTrainedPipeline():
                 - "feature_vector": A list of floats corresponding to the image embedding.
         """
         parameters = {"mode": "image"}
-        # decode base64 image to PIL
-        image = Image.open(BytesIO(base64.b64decode(inputs))).convert("RGB")
-        image = self.transform(image).unsqueeze(0).to(device)   
-        text=""
+        if isinstance(inputs, str):
+            # decode base64 image to PIL
+            image = Image.open(
+                BytesIO(base64.b64decode(inputs))).convert("RGB")
+        elif isinstance(inputs, Image.Image):
+            image = inputs.convert("RGB")
+
+        image = self.transform(image).unsqueeze(0).to(device)
+
+        text = ""
         with torch.no_grad():
-            feature_vector = self.model(image, text, mode=parameters["mode"])[0,0].tolist()
+            feature_vector = self.model(image, text, mode=parameters["mode"])[
+                0, 0].tolist()
         # postprocess the prediction
         return feature_vector
