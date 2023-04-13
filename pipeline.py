@@ -48,8 +48,8 @@ class PreTrainedPipeline():
             # decode base64 image to PIL
             image = Image.open(
                 BytesIO(base64.b64decode(inputs))).convert("RGB")
-        elif isinstance(inputs, Image.Image):
-            image = inputs.convert("RGB")
+        elif isinstance(inputs, "Image.Image"):
+            image = Image.open(inputs).convert("RGB")
 
         image = self.transform(image).unsqueeze(0).to(device)
 
