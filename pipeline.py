@@ -34,7 +34,7 @@ class PreTrainedPipeline():
                 (0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
         ])
 
-    def __call__(self, inputs: Union[str, "Image.Image"]) -> List[float]:
+    def __call__(self, inputs: "Image.Image") -> List[float]:
         """
         Args:
             data (:obj:):
@@ -44,12 +44,13 @@ class PreTrainedPipeline():
                 - "feature_vector": A list of floats corresponding to the image embedding.
         """
         parameters = {"mode": "image"}
-        if isinstance(inputs, str):
-            # decode base64 image to PIL
-            image = Image.open(
-                BytesIO(base64.b64decode(inputs))).convert("RGB")
-        elif isinstance(inputs, "Image.Image"):
-            image = Image.open(inputs).convert("RGB")
+        image = inputs.convert("RGB")
+        # if isinstance(inputs, str):
+        #     # decode base64 image to PIL
+        #     image = Image.open(
+        #         BytesIO(base64.b64decode(inputs))).convert("RGB")
+        # elif isinstance(inputs, "Image.Image"):
+        #     image = Image.open(inputs).convert("RGB")
 
         image = self.transform(image).unsqueeze(0).to(device)
 
