@@ -3,7 +3,6 @@ tags:
 - feature-extraction
 license: bsd-3-clause
 library_name: generic
-pipeline_tag: generic
 duplicated_from: florentgbelidji/blip_image_embeddings
 widget:
 - text: >-
