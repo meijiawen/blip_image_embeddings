@@ -43,6 +43,7 @@ class PreTrainedPipeline():
             A :obj:`dict`:. The object returned should be a dict like {"feature_vector": [0.6331314444541931,0.8802216053009033,...,-0.7866355180740356,]} containing :
                 - "feature_vector": A list of floats corresponding to the image embedding.
         """
+        
         parameters = {"mode": "image"}
         if isinstance(inputs, str):
             # decode base64 image to PIL
